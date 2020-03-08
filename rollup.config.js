@@ -19,18 +19,21 @@ export default {
 		name: "app",
 	},
 	plugins: [
-		// Bundles SCSS imported from JS files
-		scss({
-			output: "public/css/global.css",
-			sourceMapEmbed: emitSourcemaps
-		}),
 
 		// Compile Svelte components
 		svelte({
 			dev: !production,
-			// Bundles SCSS embedded within Svelte files
+			// Processes SCSS embedded within Svelte files
 			preprocess: autoPreprocess(),
-			css: css => { css.write("public/css/bundle.css", emitSourcemaps); }
+			// Emit CSS for scss plugin to bundle
+			emitCss: true
+		}),
+
+		// Bundles SCSS imported from JS files and other plugins
+		// This outputs the sourcemap from svelte plugin regardless of settings
+		scss({
+			output: "public/css/bundle.css",
+			outputStyle: production ? "compressed" : ""
 		}),
 
 		// Locates modules using the Node resolution algorithm
