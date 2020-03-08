@@ -11,7 +11,7 @@ const emitSourcemaps = false;
 export default {
 	input: "src/main.js",
 	output: {
-		file: "public/bundle.js",
+		file: "public/js/bundle.js",
 		sourcemap: emitSourcemaps,
 		// iife – A self-executing function, suitable for inclusion as a <script> tag
 		format: "iife",
@@ -21,7 +21,7 @@ export default {
 	plugins: [
 		// Bundles SCSS imported from JS files
 		scss({
-			output: "public/global.css",
+			output: "public/css/global.css",
 			sourceMapEmbed: emitSourcemaps
 		}),
 
@@ -30,7 +30,7 @@ export default {
 			dev: !production,
 			// Bundles SCSS embedded within Svelte files
 			preprocess: autoPreprocess(),
-			css: css => { css.write("public/bundle.css", emitSourcemaps); }
+			css: css => { css.write("public/css/bundle.css", emitSourcemaps); }
 		}),
 
 		// Locates modules using the Node resolution algorithm
