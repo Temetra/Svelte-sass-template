@@ -4,6 +4,9 @@ import scss from "rollup-plugin-scss";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
+import babel from "rollup-plugin-babel";
+import serve from "rollup-plugin-serve";
+import livereload from "rollup-plugin-livereload";
 
 const production = !process.env.ROLLUP_WATCH;
 const emitSourcemaps = false;
@@ -11,7 +14,7 @@ const emitSourcemaps = false;
 export default {
 	input: "src/main.js",
 	output: {
-		file: "public/js/bundle.js",
+		file: "public/bundle.js",
 		sourcemap: emitSourcemaps,
 		// iife – A self-executing function, suitable for inclusion as a <script> tag
 		format: "iife",
@@ -32,7 +35,7 @@ export default {
 		// Bundles SCSS imported from JS files and other plugins
 		// This outputs the sourcemap from svelte plugin regardless of settings
 		scss({
-			output: "public/css/bundle.css",
+			output: "public/bundle.css",
 			outputStyle: production ? "compressed" : ""
 		}),
 
@@ -46,6 +49,21 @@ export default {
 
 		// Convert CommonJS modules to ES6
 		commonjs(),
+
+		// Dev host
+		!production && serve({
+			open: true,
+			contentBase: "public",
+			port: 5000
+		}),
+
+		!production && livereload(),
+
+		// Transpile
+		production && babel({
+			presets: ["@babel/preset-env"],
+			exclude: "node_modules/**"
+		}),
 
 		// Minify generated bundle if in production mode
 		production && terser()

@@ -1,10 +1,8 @@
 <script>
-export let name;
+	import { onMount } from "svelte";
 </script>
 
 <style type="text/scss">
-$color: green;
-h1 { color:$color; }
 </style>
 
-<h1>Hello {name}!</h1>
+<div>Hello</div>
