@@ -62,7 +62,9 @@ export default {
 		// Transpile
 		production && babel({
 			presets: ["@babel/preset-env"],
-			exclude: "node_modules/**"
+			plugins: ["@babel/transform-runtime"],
+			exclude: "node_modules/**",
+			runtimeHelpers: true
 		}),
 
 		// Minify generated bundle if in production mode
