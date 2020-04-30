@@ -7,6 +7,7 @@ import { terser } from "rollup-plugin-terser";
 import babel from "rollup-plugin-babel";
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
+import webWorkerLoader from "rollup-plugin-web-worker-loader";
 
 const production = !process.env.ROLLUP_WATCH;
 const emitSourcemaps = false;
@@ -22,6 +23,8 @@ export default {
 		name: "app",
 	},
 	plugins: [
+		// Web workers
+		webWorkerLoader(),
 
 		// Compile Svelte components
 		svelte({
