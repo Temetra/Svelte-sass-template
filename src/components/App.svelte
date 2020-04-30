@@ -2,18 +2,15 @@
 	import { onMount } from "svelte";
 	import TestWorker from "web-worker:../modules/test.worker";
 
-	let workerResponse, textPromise;
-
-	const worker = new TestWorker();
-
-	worker.addEventListener("message", function (evt) {
-		console.log(`Client got: ${evt.data}`);
-		workerResponse = evt.data;
-	});
-
+	let worker, workerResponse, textPromise;
 	const fetchDelay = 2000;
 
-	onMount(() => {
+	onMount(async () => {
+		worker = new TestWorker();
+		worker.addEventListener("message", function (evt) {
+			console.log(`Client got: ${evt.data}`);
+			workerResponse = evt.data;
+		});
 		worker.postMessage("Sending message to worker");
 
 		textPromise = new Promise(resolve => setTimeout(() => resolve(), fetchDelay))

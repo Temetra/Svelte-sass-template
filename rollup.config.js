@@ -3,7 +3,7 @@ import autoPreprocess from "svelte-preprocess";
 import scss from "rollup-plugin-scss";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import { getBabelOutputPlugin } from "@rollup/plugin-babel";
+import babel from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
@@ -17,7 +17,8 @@ export default {
 	output: [{
 		file: "public/bundle.js",
 		sourcemap: emitSourcemaps,
-		format: "esm"
+		format: "iife",
+		name:"app"
 	}],
 	plugins: [
 		// Web workers
@@ -60,8 +61,11 @@ export default {
 		!production && livereload(),
 
 		// Transpile
-		production && getBabelOutputPlugin({
-			presets: [["@babel/preset-env", { modules: "umd" }]]
+		production && babel({
+			extensions:[".js", ".jsx", ".es6", ".es", ".mjs", ".svelte"],
+			babelHelpers:"runtime",
+			presets: [["@babel/preset-env"]],
+			plugins: ["@babel/plugin-transform-runtime"]
 		}),
 
 		// Minify generated bundle if in production mode
