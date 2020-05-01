@@ -16,7 +16,7 @@
 
 <style type="text/scss">
 	.error {
-		color:red;
+		color: red;
 	}
 </style>
 

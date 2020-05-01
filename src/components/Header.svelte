@@ -1,10 +1,14 @@
 <style type="text/scss">
 	// Import and use set-colors mixin from src/scss/_shared.scss
 	@import "shared";
-	$title:("text":white, "background":darkslateblue);
-	
+
+	$title: (
+		"text": white,
+		"background": darkslateblue
+	);
+
 	h1 {
-		padding:2rem;
+		padding: 2rem;
 		@include set-colors($title);
 	}
 </style>

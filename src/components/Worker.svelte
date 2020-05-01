@@ -8,11 +8,11 @@
 		// Create and query worker
 		worker = new TestWorker();
 
-		worker.addEventListener("message", function (evt) {
+		worker.addEventListener("message", function(evt) {
 			console.log(`Client got: ${evt.data}`);
 			workerResponse = evt.data;
 		});
-		
+
 		worker.postMessage("Sending message to worker");
 	});
 </script>
