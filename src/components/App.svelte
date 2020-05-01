@@ -1,11 +1,13 @@
 <script>
 	import { onMount } from "svelte";
-	import TestWorker from "web-worker:../modules/test.worker";
+	import TestWorker from "web-worker:~/modules/test.worker";
+	import { waitFor, checkResponse } from "~/modules/fetching.js";
 
 	let worker, workerResponse, textPromise;
 	const fetchDelay = 2000;
 
 	onMount(async () => {
+		// Create and query worker
 		worker = new TestWorker();
 		worker.addEventListener("message", function (evt) {
 			console.log(`Client got: ${evt.data}`);
@@ -13,13 +15,17 @@
 		});
 		worker.postMessage("Sending message to worker");
 
-		textPromise = new Promise(resolve => setTimeout(() => resolve(), fetchDelay))
+		// Fetch text from file after n milliseconds
+		textPromise = waitFor(fetchDelay)
 			.then(() => fetch("./lorem.txt"))
+			.then(checkResponse)
 			.then(result => result.text());
 	});
 </script>
 
 <style type="text/scss">
+	// Import and use set-colors mixin from src/scss/_shared.scss
+	@import "shared";
 	$title:("text":white, "background":darkslateblue);
 	
 	section { 
@@ -28,8 +34,11 @@
 	
 	h1 {
 		padding:2rem;
-		color:map-get($title, "text");
-		background-color:map-get($title, "background");
+		@include set-colors($title);
+	}
+
+	.error {
+		color:red;
 	}
 </style>
 
@@ -51,6 +60,8 @@
 			<p>Fetching text in {fetchDelay} milliseconds</p>
 		{:then text}
 			<p>{text}</p>
+		{:catch error}
+			<p class="error">There was an issue loading the data: {error.status} {error.message}</p>
 		{/await}
 	{/if}
 </section>
