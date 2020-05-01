@@ -13,14 +13,7 @@ import livereload from "rollup-plugin-livereload";
 
 const production = !process.env.ROLLUP_WATCH;
 const emitSourcemaps = !production;
-
-// Paths used for alias replacement
-const paths = {
-	scss: path.resolve(__dirname, "src/scss"),
-	stores: path.resolve(__dirname, "src/stores"),
-	modules: path.resolve(__dirname, "src/modules"),
-	components: path.resolve(__dirname, "src/components"),
-};
+const pathTo = (subdir) => path.resolve(__dirname, "src", subdir) + "/";
 
 export default {
 	input: "src/main.js",
@@ -31,14 +24,22 @@ export default {
 		name: "app"
 	}],
 	plugins: [
-		// Rewrite aliased imports as absolute paths
+		/*
+		"alias" rewrites import statements before the file is resolved
+		Three specific shortcuts are replaced anywhere in the import path
+			~/scss/ ~/stores/ ~/modules/
+		This works for web-worker imports
+			import TestWorker from "web-worker:~/modules/test.worker";
+		The last is a components shortcut which changes imports that start with ~/
+			import Header from "~/Header.svelte";
+		*/ 
 		alias({
 			resolve: [".svelte", ".js"],
 			entries: [
-				{ find: /~\/styles\//, replacement: paths.scss + "/" },
-				{ find: /~\/stores\//, replacement: paths.stores + "/" },
-				{ find: /~\/modules\//, replacement: paths.modules + "/" },
-				{ find: /^~\//, replacement: paths.components + "/" },
+				{ find: /~\/scss\//, replacement: pathTo("scss") },
+				{ find: /~\/stores\//, replacement: pathTo("stores") },
+				{ find: /~\/modules\//, replacement: pathTo("modules") },
+				{ find: /^~\//, replacement: pathTo("components") },
 			]
 		}),
 
@@ -59,7 +60,7 @@ export default {
 			// Processes SCSS embedded within Svelte files
 			preprocess: autoPreprocess({
 				scss: {
-					includePaths: [paths.scss],
+					includePaths: [pathTo("scss")],
 					sourceMap: emitSourcemaps,
 				}
 			}),
