@@ -1,5 +1,5 @@
-export function waitFor(ms) {
-	return new Promise(resolve => setTimeout(() => resolve(), ms));
+export function waitFor(ms, param) {
+	return new Promise(resolve => setTimeout(() => resolve(param), ms));
 }
 
 export function checkResponse(response) {
