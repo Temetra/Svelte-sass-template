@@ -32,7 +32,7 @@ export default {
 			import TestWorker from "web-worker:~/modules/test.worker";
 		The last is a components shortcut which changes imports that start with ~/
 			import Header from "~/Header.svelte";
-		*/ 
+		*/
 		alias({
 			resolve: [".svelte", ".js"],
 			entries: [
@@ -82,7 +82,7 @@ export default {
 		production && babel({
 			extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".svelte"],
 			babelHelpers: "runtime",
-			presets: [["@babel/preset-env"]],
+			presets: [["@babel/preset-env", { targets: "> 0.25%, not dead" }]],
 			plugins: ["@babel/plugin-transform-runtime"]
 		}),
 
